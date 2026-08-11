@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Dataset</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">Student Analytics</div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/uploadpage">Upload</a></li>
+            <li><a href="/chartbuilder">Chart Builder</a></li>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Search Section -->
+    <div class="box">
+        <h2 style="text-align:center; color:#1e3a8a;">Search Dataset</h2>
+
+        {% if columns %}
+        <!-- Search Form -->
+        <form action="/search" method="POST" style="text-align:center; margin-top:20px;">
+            <label for="column">Select Column:</label>
+            <select name="column" id="column">
+                {% for col in columns %}
+                    <option value="{{ col }}">{{ col }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="query">Search Term:</label>
+            <input type="text" name="query" id="query" placeholder="Enter keyword">
+
+            <button type="submit">Search</button>
+        </form>
+        {% else %}
+        <!-- Fallback when no dataset -->
+        <p style="text-align:center; color:#1e3a8a; margin-top:30px;">
+            ⚠️ No dataset uploaded yet. Please upload a file first to enable searching.
+        </p>
+        {% endif %}
+
+        <!-- Messages -->
+        {% if message %}
+        <p style="text-align:center; color:red; margin-top:20px;">{{ message }}</p>
+        {% endif %}
+
+        <!-- Results Table -->
+        {% if table %}
+        <div style="margin-top:30px;">
+            {{ table|safe }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+

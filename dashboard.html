@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Student Analytics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        Student Analytics
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <a href="/">
+                Home
+            </a>
+        </li>
+
+        <li>
+            <a href="/uploadpage">
+                Upload
+            </a>
+        </li>
+
+        <li>
+            <a href="/chartbuilder">
+                Chart Builder
+            </a>
+        </li>
+
+        <li>
+            <a href="/features">
+                Features
+            </a>
+        </li>
+
+        <li>
+            <a href="/about">
+                About
+            </a>
+        </li>
+
+        <li>
+            <a href="/contact">
+                Contact
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<div class="box">
+
+    <h2 style="text-align:center;">
+        Dataset Uploaded Successfully
+    </h2>
+
+
+    <!-- =================================================
+         KPI
+    ================================================== -->
+
+    <div class="kpi-container">
+
+        <div class="kpi-card">
+
+            <h3>
+                Total Records
+            </h3>
+
+            <p>
+                {{ total_records }}
+            </p>
+
+        </div>
+
+
+        <div class="kpi-card">
+
+            <h3>
+                Total Columns
+            </h3>
+
+            <p>
+                {{ total_columns }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         COLUMNS
+    ================================================== -->
+
+    <h3 style="text-align:center;">
+        Dataset Columns
+    </h3>
+
+    <div class="column-list">
+
+        {% for col in columns %}
+
+            <span class="column-tag">
+                {{ col }}
+            </span>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <div class="table-header">
+
+        <h3>
+            Dataset Preview
+        </h3>
+
+
+        <div class="search-controls">
+
+            <input
+                type="text"
+                id="tableSearch"
+                placeholder="Search..."
+            >
+
+
+            <select id="rowFilter">
+
+                <option value="all">
+                    All Rows
+                </option>
+
+                <option value="top">
+                    Top N
+                </option>
+
+                <option value="bottom">
+                    Bottom N
+                </option>
+
+            </select>
+
+
+            <input
+                type="number"
+                id="rowCount"
+                placeholder="N"
+                min="1"
+                style="width:70px;"
+            >
+
+
+            <button onclick="applyFilters()">
+                Apply
+            </button>
+
+
+            <button onclick="resetFilters()">
+                Reset
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        {{ table|safe }}
+
+    </div>
+
+
+    <!-- =================================================
+         AUTOMATIC CHART
+    ================================================== -->
+
+    <h3 style="text-align:center;">
+        Automatic Analysis
+    </h3>
+
+    <div class="chart-container">
+
+        {{ chart_html|safe }}
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <p>
+        © 2026 Student Analytics System
+        <span> | </span>
+        Developed by Kushal
+    </p>
+
+</footer>
+
+
+<!-- =====================================================
+     TABLE JAVASCRIPT
+===================================================== -->
+
+<script>
+
+const searchInput =
+    document.getElementById("tableSearch");
+
+const rowFilter =
+    document.getElementById("rowFilter");
+
+const rowCount =
+    document.getElementById("rowCount");
+
+
+function getRows() {
+
+    const table =
+        document.querySelector(".table-container table");
+
+    if (!table) {
+        return [];
+    }
+
+    return Array.from(
+        table.querySelectorAll("tbody tr")
+    );
+}
+
+
+searchInput.addEventListener(
+    "keyup",
+    function () {
+
+        const value =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
+        const rows = getRows();
+
+        rows.forEach(
+            function(row) {
+
+                const text =
+                    row.textContent
+                       .toLowerCase();
+
+                row.style.display =
+                    text.includes(value)
+                    ? ""
+                    : "none";
+
+            }
+        );
+
+    }
+);
+
+
+function applyFilters() {
+
+    const rows = getRows();
+
+    const filter =
+        rowFilter.value;
+
+    const n =
+        parseInt(rowCount.value);
+
+
+    // First reset rows
+
+    rows.forEach(
+        row => row.style.display = ""
+    );
+
+
+    // Search
+
+    const search =
+        searchInput.value
+            .toLowerCase()
+            .trim();
+
+    if (search !== "") {
+
+        rows.forEach(
+            row => {
+
+                if (
+                    !row.textContent
+                       .toLowerCase()
+                       .includes(search)
+                ) {
+
+                    row.style.display = "none";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    // Top / Bottom N
+
+    if (
+        !n ||
+        n <= 0 ||
+        filter === "all"
+    ) {
+
+        return;
+
+    }
+
+
+    if (filter === "top") {
+
+        rows.forEach(
+            (row, index) => {
+
+                if (index >= n) {
+
+                    row.style.display = "none";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (filter === "bottom") {
+
+        rows.forEach(
+            (row, index) => {
+
+                if (
+                    index < rows.length - n
+                ) {
+
+                    row.style.display = "none";
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+function resetFilters() {
+
+    searchInput.value = "";
+
+    rowFilter.value = "all";
+
+    rowCount.value = "";
+
+    const rows = getRows();
+
+    rows.forEach(
+        row => row.style.display = ""
+    );
+
+}
+
+</script>
+
+
+</body>
+</html>
+
+
+
+
+

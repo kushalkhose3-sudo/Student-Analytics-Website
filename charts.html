@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chart Builder | Student Analytics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        Student Analytics
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <a href="/">
+                Home
+            </a>
+        </li>
+
+        <li>
+            <a href="/uploadpage">
+                Upload
+            </a>
+        </li>
+
+        <li>
+            <a href="/chartbuilder" class="active">
+                Chart Builder
+            </a>
+        </li>
+
+        <li>
+            <a href="/features">
+                Features
+            </a>
+        </li>
+
+        <li>
+            <a href="/about">
+                About
+            </a>
+        </li>
+
+        <li>
+            <a href="/contact">
+                Contact
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<section class="chart-page-header">
+
+    <div class="chart-header-content">
+
+        <span class="small-heading">
+            DATA VISUALIZATION
+        </span>
+
+        <h1>
+            Interactive Chart Builder
+        </h1>
+
+        <p>
+            Explore ready-made dashboard examples or create
+            your own visualization using your uploaded dataset.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     DEMO INTRO
+===================================================== -->
+
+<section class="demo-intro">
+
+    <h2>
+        Ready-Made Demo Dashboards
+    </h2>
+
+    <p>
+        Select a dashboard type to see how your data could be
+        presented. The recommended columns show what type of
+        dataset works best with each dashboard.
+    </p>
+
+</section>
+
+
+<!-- =====================================================
+     DEMO TABS
+===================================================== -->
+
+<section class="demo-selector">
+
+    <button
+        class="demo-tab active"
+        onclick="showDemo('studentDemo')">
+
+        🎓 Student Dashboard
+
+    </button>
+
+
+    <button
+        class="demo-tab"
+        onclick="showDemo('studentDemo2')">
+
+        📚 Student Performance
+
+    </button>
+
+
+    <button
+        class="demo-tab"
+        onclick="showDemo('salesDemo')">
+
+        🛒 Sales Dashboard
+
+    </button>
+
+</section>
+
+
+<!-- =====================================================
+     STUDENT DEMO
+===================================================== -->
+
+<section
+    id="studentDemo"
+    class="demo-dashboard active-demo">
+
+    <div class="demo-title">
+
+        <span class="demo-label">
+            DEMO 01
+        </span>
+
+        <h2>
+            Student Analytics Dashboard
+        </h2>
+
+        <p>
+            Suitable for student datasets containing academic
+            information.
+        </p>
+
+    </div>
+
+
+    <div class="required-columns">
+
+        <h3>
+            Recommended Columns
+        </h3>
+
+        <div class="column-pills">
+
+            <span>Student Name</span>
+            <span>Roll No</span>
+            <span>Subject</span>
+            <span>Marks</span>
+            <span>Percentage</span>
+            <span>SGPA</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="demo-kpi-grid">
+
+        <div class="demo-kpi-card">
+
+            <div class="demo-icon">
+                👨‍🎓
+            </div>
+
+            <div>
+
+                <span>
+                    Total Students
+                </span>
+
+                <strong>
+                    300
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="demo-kpi-card">
+
+            <div class="demo-icon">
+                📊
+            </div>
+
+            <div>
+
+                <span>
+                    Average Marks
+                </span>
+
+                <strong>
+                    72.4
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="demo-kpi-card">
+
+            <div class="demo-icon">
+                🏆
+            </div>
+
+            <div>
+
+                <span>
+                    Highest Marks
+                </span>
+
+                <strong>
+                    98
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="demo-kpi-card">
+
+            <div class="demo-icon">
+                ⭐
+            </div>
+
+            <div>
+
+                <span>
+                    Average SGPA
+                </span>
+
+                <strong>
+                    8.1
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="demo-chart-grid">
+
+        <div class="demo-chart-card">
+
+            <h3>
+                Marks Distribution
+            </h3>
+
+            <div id="studentMarksChart"></div>
+
+        </div>
+
+
+        <div class="demo-chart-card">
+
+            <h3>
+                Student Performance
+            </h3>
+
+            <div id="studentPerformanceChart"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STUDENT DEMO 2
+===================================================== -->
+
+<section
+    id="studentDemo2"
+    class="demo-dashboard">
+
+    <div class="demo-title">
+
+        <span class="demo-label">
+            DEMO 02
+        </span>
+
+        <h2>
+            Student Performance Dashboard
+        </h2>
+
+        <p>
+            Suitable for comparing subject-wise student performance.
+        </p>
+
+    </div>
+
+
+    <div class="required-columns">
+
+        <h3>
+            Recommended Columns
+        </h3>
+
+        <div class="column-pills">
+
+            <span>Student Name</span>
+            <span>Subject</span>
+            <span>Marks</span>
+            <span>Result</span>
+            <span>SGPA</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="demo-chart-grid">
+
+        <div class="demo-chart-card">
+
+            <h3>
+                Subject Average
+            </h3>
+
+            <div id="subjectAverageChart"></div>
+
+        </div>
+
+
+        <div class="demo-chart-card">
+
+            <h3>
+                Result Distribution
+            </h3>
+
+            <div id="resultChart"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SALES DEMO
+===================================================== -->
+
+<section
+    id="salesDemo"
+    class="demo-dashboard">
+
+    <div class="demo-title">
+
+        <span class="demo-label">
+            DEMO 03
+        </span>
+
+        <h2>
+            Sales Analytics Dashboard
+        </h2>
+
+        <p>
+            Suitable for sales, product and revenue datasets.
+        </p>
+
+    </div>
+
+
+    <div class="required-columns">
+
+        <h3>
+            Recommended Columns
+        </h3>
+
+        <div class="column-pills">
+
+            <span>Product</span>
+            <span>Category</span>
+            <span>Sales</span>
+            <span>Quantity</span>
+            <span>Revenue</span>
+            <span>Date</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="demo-kpi-grid">
+
+        <div class="demo-kpi-card">
+
+            <div class="demo-icon">
+                💰
+            </div>
+
+            <div>
+
+                <span>
+                    Total Revenue
+                </span>
+
+                <strong>
+                    ₹8.4L
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="demo-kpi-card">
+
+            <div class="demo-icon">
+                📦
+            </div>
+
+            <div>
+
+                <span>
+                    Total Orders
+                </span>
+
+                <strong>
+                    1,250
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="demo-kpi-card">
+
+            <div class="demo-icon">
+                🛍️
+            </div>
+
+            <div>
+
+                <span>
+                    Products
+                </span>
+
+                <strong>
+                    86
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="demo-kpi-card">
+
+            <div class="demo-icon">
+                📈
+            </div>
+
+            <div>
+
+                <span>
+                    Growth
+                </span>
+
+                <strong>
+                    18.6%
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="demo-chart-grid">
+
+        <div class="demo-chart-card">
+
+            <h3>
+                Sales by Category
+            </h3>
+
+            <div id="salesCategoryChart"></div>
+
+        </div>
+
+
+        <div class="demo-chart-card">
+
+            <h3>
+                Monthly Revenue
+            </h3>
+
+            <div id="salesRevenueChart"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CUSTOM BUILDER
+===================================================== -->
+
+<section class="custom-builder-section">
+
+    <div class="builder-heading">
+
+        <span class="small-heading">
+            YOUR DATA
+        </span>
+
+        <h2>
+            Build Your Own Chart
+        </h2>
+
+        <p>
+            Your uploaded dataset's columns appear below.
+            Select the columns and chart type you want.
+        </p>
+
+    </div>
+
+
+    {% if columns %}
+
+        <div class="available-columns">
+
+            <h3>
+                Your Available Columns
+            </h3>
+
+            <div class="column-pills">
+
+                {% for col in columns %}
+
+                    <span>
+                        {{ col }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="/custom_chart"
+            class="chart-builder-form">
+
+
+            <!-- X -->
+
+            <div class="form-group">
+
+                <label for="x_col">
+                    X-Axis / Category Column
+                </label>
+
+                <select
+                    name="x_col"
+                    id="x_col"
+                    required>
+
+                    <option value="">
+                        Select X-axis column
+                    </option>
+
+                    {% for col in columns %}
+
+                        <option value="{{ col }}">
+                            {{ col }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- Y -->
+
+            <div class="form-group">
+
+                <label for="y_col">
+                    Y-Axis / Numeric Column
+                </label>
+
+                <select
+                    name="y_col"
+                    id="y_col"
+                    required>
+
+                    <option value="">
+                        Select Y-axis column
+                    </option>
+
+                    {% for col in columns %}
+
+                        <option value="{{ col }}">
+                            {{ col }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- Chart -->
+
+            <div class="form-group">
+
+                <label for="chart_type">
+                    Chart Type
+                </label>
+
+                <select
+                    name="chart_type"
+                    id="chart_type"
+                    required>
+
+                    <option value="">
+                        Select Chart Type
+                    </option>
+
+                    <option value="bar">
+                        📊 Bar Chart
+                    </option>
+
+                    <option value="line">
+                        📈 Line Chart
+                    </option>
+
+                    <option value="scatter">
+                        🔵 Scatter Plot
+                    </option>
+
+                    <option value="pie">
+                        🥧 Pie Chart
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Filter -->
+
+            <div class="form-group">
+
+                <label for="rowFilter">
+                    Row Filter
+                </label>
+
+                <select
+                    name="rowFilter"
+                    id="rowFilter">
+
+                    <option value="all">
+                        All Rows
+                    </option>
+
+                    <option value="top">
+                        Top N
+                    </option>
+
+                    <option value="bottom">
+                        Bottom N
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- N -->
+
+            <div class="form-group">
+
+                <label for="rowCount">
+                    Number of Rows
+                </label>
+
+                <input
+                    type="number"
+                    name="rowCount"
+                    id="rowCount"
+                    min="1"
+                    placeholder="Example: 10">
+
+            </div>
+
+
+            <div class="builder-button-area">
+
+                <button
+                    type="submit"
+                    class="build-chart-btn">
+
+                    🚀 Generate Chart
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+    {% else %}
+
+        <div class="no-dataset-message">
+
+            <h3>
+                📂 No Dataset Uploaded
+            </h3>
+
+            <p>
+                Upload your CSV or Excel dataset first.
+                After uploading, your column names will
+                automatically appear here.
+            </p>
+
+            <a
+                href="/uploadpage"
+                class="primary-btn">
+
+                Upload Dataset
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+
+    {% if chart_html %}
+
+        <div class="chart-container">
+
+            {{ chart_html|safe }}
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <p>
+        © 2026 Student Analytics System
+        <span> | </span>
+        Developed by Kushal
+    </p>
+
+</footer>
+
+
+<!-- =====================================================
+     DEMO JAVASCRIPT
+===================================================== -->
+
+<script>
+
+function showDemo(id) {
+
+    const demos =
+        document.querySelectorAll(".demo-dashboard");
+
+    const tabs =
+        document.querySelectorAll(".demo-tab");
+
+
+    demos.forEach(
+        demo => {
+
+            demo.classList.remove(
+                "active-demo"
+            );
+
+        }
+    );
+
+
+    tabs.forEach(
+        tab => {
+
+            tab.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    document
+        .getElementById(id)
+        .classList.add("active-demo");
+
+
+    event.currentTarget
+        .classList.add("active");
+
+}
+
+
+/* =====================================================
+   STUDENT CHART 1
+===================================================== */
+
+Plotly.newPlot(
+    "studentMarksChart",
+    [
+        {
+            x: [
+                "0-40",
+                "41-50",
+                "51-60",
+                "61-70",
+                "71-80",
+                "81-90",
+                "91-100"
+            ],
+
+            y: [
+                8,
+                18,
+                32,
+                65,
+                82,
+                62,
+                33
+            ],
+
+            type: "bar"
+        }
+    ],
+
+    {
+        margin: {
+            t: 20,
+            r: 20,
+            l: 45,
+            b: 45
+        },
+
+        paper_bgcolor: "white",
+
+        plot_bgcolor: "white"
+    },
+
+    {
+        responsive: true
+    }
+);
+
+
+/* =====================================================
+   STUDENT CHART 2
+===================================================== */
+
+Plotly.newPlot(
+    "studentPerformanceChart",
+    [
+        {
+            x: [
+                "Sem 1",
+                "Sem 2",
+                "Sem 3",
+                "Sem 4"
+            ],
+
+            y: [
+                68,
+                74,
+                78,
+                82
+            ],
+
+            type: "line",
+
+            mode: "lines+markers"
+        }
+    ],
+
+    {
+        margin: {
+            t: 20,
+            r: 20,
+            l: 45,
+            b: 45
+        },
+
+        paper_bgcolor: "white",
+
+        plot_bgcolor: "white"
+    },
+
+    {
+        responsive: true
+    }
+);
+
+
+/* =====================================================
+   SUBJECT AVERAGE
+===================================================== */
+
+Plotly.newPlot(
+    "subjectAverageChart",
+    [
+        {
+            x: [
+                "Maths",
+                "Science",
+                "Programming",
+                "English",
+                "Database"
+            ],
+
+            y: [
+                76,
+                81,
+                86,
+                72,
+                79
+            ],
+
+            type: "bar"
+        }
+    ],
+
+    {
+        margin: {
+            t: 20,
+            r: 20,
+            l: 45,
+            b: 45
+        },
+
+        paper_bgcolor: "white",
+
+        plot_bgcolor: "white"
+    },
+
+    {
+        responsive: true
+    }
+);
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+Plotly.newPlot(
+    "resultChart",
+    [
+        {
+            labels: [
+                "Pass",
+                "Fail"
+            ],
+
+            values: [
+                270,
+                30
+            ],
+
+            type: "pie"
+        }
+    ],
+
+    {
+        margin: {
+            t: 20,
+            r: 20,
+            l: 20,
+            b: 20
+        },
+
+        paper_bgcolor: "white"
+    },
+
+    {
+        responsive: true
+    }
+);
+
+
+/* =====================================================
+   SALES CATEGORY
+===================================================== */
+
+Plotly.newPlot(
+    "salesCategoryChart",
+    [
+        {
+            x: [
+                "Electronics",
+                "Clothing",
+                "Furniture",
+                "Books",
+                "Accessories"
+            ],
+
+            y: [
+                240000,
+                180000,
+                150000,
+                95000,
+                75000
+            ],
+
+            type: "bar"
+        }
+    ],
+
+    {
+        margin: {
+            t: 20,
+            r: 20,
+            l: 55,
+            b: 55
+        },
+
+        paper_bgcolor: "white",
+
+        plot_bgcolor: "white"
+    },
+
+    {
+        responsive: true
+    }
+);
+
+
+/* =====================================================
+   SALES REVENUE
+===================================================== */
+
+Plotly.newPlot(
+    "salesRevenueChart",
+    [
+        {
+            x: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun"
+            ],
+
+            y: [
+                85000,
+                97000,
+                105000,
+                122000,
+                138000,
+                155000
+            ],
+
+            type: "line",
+
+            mode: "lines+markers"
+        }
+    ],
+
+    {
+        margin: {
+            t: 20,
+            r: 20,
+            l: 55,
+            b: 45
+        },
+
+        paper_bgcolor: "white",
+
+        plot_bgcolor: "white"
+    },
+
+    {
+        responsive: true
+    }
+);
+
+</script>
+
+
+</body>
+</html>
+
+
+

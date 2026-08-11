@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Dataset | Student Analytics</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+
+<nav class="navbar">
+
+    <div class="logo">
+        Student Analytics
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <a href="/">
+                Home
+            </a>
+        </li>
+
+        <li>
+            <a href="/uploadpage" class="active">
+                Upload
+            </a>
+        </li>
+
+        <li>
+            <a href="/chartbuilder">
+                Chart Builder
+            </a>
+        </li>
+
+        <li>
+            <a href="/features">
+                Features
+            </a>
+        </li>
+
+        <li>
+            <a href="/about">
+                About
+            </a>
+        </li>
+
+        <li>
+            <a href="/contact">
+                Contact
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<div class="upload-wrapper">
+
+    <div class="upload-box">
+
+        <span class="small-heading">
+            DATASET ANALYSIS
+        </span>
+
+        <h1>
+            Upload Your Dataset
+        </h1>
+
+        <p>
+            Upload a CSV or Excel file to generate your
+            dashboard and start analysing your data.
+        </p>
+
+
+        <form method="POST"
+              action="/upload"
+              enctype="multipart/form-data">
+
+            <input
+                type="file"
+                name="file"
+                class="file-input"
+                accept=".csv,.xlsx,.xls"
+                required
+            >
+
+            <button
+                type="submit"
+                class="primary-btn">
+
+                📂 Upload & Analyse
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<footer class="footer">
+
+    <p>
+        © 2026 Student Analytics System
+        <span> | </span>
+        Developed by Kushal
+    </p>
+
+</footer>
+
+
+</body>
+</html>
